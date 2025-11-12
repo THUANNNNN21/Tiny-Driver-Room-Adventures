@@ -7,6 +7,7 @@ public class CarMovement : TMonoBehaviour
     [SerializeField] protected float acceleration;
     [SerializeField] protected float deceleration = 1f;
     [SerializeField] protected float speed = 0f;
+    public float Speed => speed;
     [SerializeField] protected float rotateSpeed = 1f;
     [SerializeField] protected float maxSpeed = 150f;
     [SerializeField] protected bool isMoving = false;
@@ -46,6 +47,11 @@ public class CarMovement : TMonoBehaviour
     }
     protected void Move()
     {
+        if (carCtlr.CarEnergy != null && carCtlr.CarEnergy.IsExhausted)
+        {
+            this.speed = 0f;
+            return;
+        }
         this.moveInput = moveAction.ReadValue<Vector2>();
         this.CalculateSpeed();
         this.ApplyFriction();
@@ -120,5 +126,9 @@ public class CarMovement : TMonoBehaviour
         }
         float energyToConsume = this.energyConsumptionRate * Mathf.Abs(this.speed) * Time.fixedDeltaTime;
         this.carCtlr.CarEnergy.ConsumeEnergy(energyToConsume);
+    }
+    public void SetSpeed(float newSpeed)
+    {
+        this.speed = newSpeed;
     }
 }

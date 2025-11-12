@@ -3,7 +3,11 @@ using UnityEngine;
 public class CarEnergy : TMonoBehaviour
 {
     [SerializeField] protected float maxEnergy = 100f;
+    public float MaxEnergy => maxEnergy;
     [SerializeField] protected float currentEnergy;
+    public float CurrentEnergy => currentEnergy;
+    [SerializeField] protected bool isExhausted = false;
+    public bool IsExhausted => isExhausted;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -17,5 +21,6 @@ public class CarEnergy : TMonoBehaviour
     {
         this.currentEnergy -= amount;
         this.currentEnergy = Mathf.Max(this.currentEnergy, 0f);
+        isExhausted = this.currentEnergy <= 0f;
     }
 }
