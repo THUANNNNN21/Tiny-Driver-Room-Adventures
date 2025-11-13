@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7778321861281416337}
   - component: {fileID: 3508097827538139144}
   - component: {fileID: 8424173095837361535}
+  - component: {fileID: 2543779014442165296}
   m_Layer: 0
   m_Name: FL_Wheel
   m_TagString: Untagged
@@ -113,6 +114,19 @@ CapsuleCollider:
   m_Height: 0.6176956
   m_Direction: 1
   m_Center: {x: -0.0062402636, y: 0, z: 0.000000029802322}
+--- !u!114 &2543779014442165296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419998860113037823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553d2dac25f494da29f0d0ad8d2e8f71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WheelRotate
+  carCtlr: {fileID: 0}
 --- !u!1 &5115735495455736681
 GameObject:
   m_ObjectHideFlags: 0
@@ -125,6 +139,7 @@ GameObject:
   - component: {fileID: 1394426474528705036}
   - component: {fileID: 680764740535580904}
   - component: {fileID: 7541441199322361115}
+  - component: {fileID: 5648659202486241930}
   m_Layer: 0
   m_Name: BL_Wheel
   m_TagString: Untagged
@@ -226,6 +241,19 @@ CapsuleCollider:
   m_Height: 0.6176956
   m_Direction: 1
   m_Center: {x: -0.0062402636, y: 0, z: 0.000000029802322}
+--- !u!114 &5648659202486241930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5115735495455736681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553d2dac25f494da29f0d0ad8d2e8f71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WheelRotate
+  carCtlr: {fileID: 0}
 --- !u!1 &6589659554022336100
 GameObject:
   m_ObjectHideFlags: 0
@@ -238,6 +266,7 @@ GameObject:
   - component: {fileID: 3073333946089902089}
   - component: {fileID: 3190950595311990292}
   - component: {fileID: 3629957128863593262}
+  - component: {fileID: 6703837685609280471}
   m_Layer: 0
   m_Name: FR_Wheel
   m_TagString: Untagged
@@ -339,6 +368,19 @@ CapsuleCollider:
   m_Height: 0.6176956
   m_Direction: 1
   m_Center: {x: 0.0062402636, y: 0, z: 0.00000008940697}
+--- !u!114 &6703837685609280471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6589659554022336100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553d2dac25f494da29f0d0ad8d2e8f71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WheelRotate
+  carCtlr: {fileID: 0}
 --- !u!1 &7606265029820296956
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,6 +393,7 @@ GameObject:
   - component: {fileID: 8372968331035156047}
   - component: {fileID: 5478501501540782541}
   - component: {fileID: 4396946105456831745}
+  - component: {fileID: 1575938562233948500}
   m_Layer: 0
   m_Name: BR_Wheel
   m_TagString: Untagged
@@ -452,6 +495,19 @@ CapsuleCollider:
   m_Height: 0.6176956
   m_Direction: 1
   m_Center: {x: 0.0062402636, y: 0, z: -0.000000029802322}
+--- !u!114 &1575938562233948500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7606265029820296956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 553d2dac25f494da29f0d0ad8d2e8f71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WheelRotate
+  carCtlr: {fileID: 0}
 --- !u!1 &7769690492283750692
 GameObject:
   m_ObjectHideFlags: 0

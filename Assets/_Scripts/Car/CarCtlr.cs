@@ -60,8 +60,16 @@ public class CarCtlr : TMonoBehaviour
     protected void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground")) return;
-        Debug.Log($"🔴 CarCtlr: Detected collision with {collision.gameObject.name}");
-        float impactForce = carMovement.Speed / 50f; // Example calculation for impact force
-        this.carImpact.ApplyImpactForce(collision, impactForce);
+        this.carImpact.ApplyImpactForce(collision);
+    }
+    protected void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ground")) return;
+        this.carImpact.EnterCheckPoint(other);
+    }
+    protected void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Ground")) return;
+        this.carImpact.ExitCheckPoint(other);
     }
 }

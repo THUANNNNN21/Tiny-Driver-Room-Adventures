@@ -5,14 +5,15 @@ TagManager:
   serializedVersion: 3
   tags:
   - Ground
+  - CheckPoint
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Missons
   - Water
   - UI
-  - 
+  - Car
   - 
   - 
   - 

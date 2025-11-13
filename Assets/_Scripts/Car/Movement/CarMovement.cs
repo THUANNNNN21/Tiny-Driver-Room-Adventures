@@ -57,9 +57,7 @@ public class CarMovement : TMonoBehaviour
         this.ApplyFriction();
         Vector3 rotation = this.CalculateRotation();
         this.carCtlr.CarRigidbody.linearVelocity = this.speed * Time.fixedDeltaTime * transform.forward;
-        // this.carCtlr.CarRigidbody.MovePosition(this.carCtlr.CarRigidbody.position + forwardMovement);
         this.carCtlr.CarRigidbody.MoveRotation(this.carCtlr.CarRigidbody.rotation * Quaternion.Euler(rotation));
-        // this.carCtlr.CarRigidbody.linearVelocity = desiredVelocity;
     }
     protected void CalculateSpeed()
     {
