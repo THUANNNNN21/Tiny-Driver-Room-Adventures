@@ -39,7 +39,7 @@ public class CarMovement : TMonoBehaviour
         }
         moveAction.Enable();
     }
-    protected void FixedUpdate()
+    public void UpdateMove()
     {
         this.Move();
         this.CheckIsMoving();
@@ -47,17 +47,15 @@ public class CarMovement : TMonoBehaviour
     }
     protected void Move()
     {
-        if (carCtlr.CarEnergy != null && carCtlr.CarEnergy.IsExhausted)
-        {
-            this.speed = 0f;
-            return;
-        }
         this.moveInput = moveAction.ReadValue<Vector2>();
         this.CalculateSpeed();
         this.ApplyFriction();
         Vector3 rotation = this.CalculateRotation();
         this.carCtlr.CarRigidbody.linearVelocity = this.speed * Time.fixedDeltaTime * transform.forward;
-        this.carCtlr.CarRigidbody.MoveRotation(this.carCtlr.CarRigidbody.rotation * Quaternion.Euler(rotation));
+        if (this.isMoving)
+        {
+            this.carCtlr.CarRigidbody.MoveRotation(this.carCtlr.CarRigidbody.rotation * Quaternion.Euler(rotation));
+        }
     }
     protected void CalculateSpeed()
     {
@@ -102,9 +100,10 @@ public class CarMovement : TMonoBehaviour
 
         return new Vector3(0f, rotationAngle, 0f);
     }
-    protected void CheckIsMoving()
+    public bool CheckIsMoving()
     {
         this.isMoving = Mathf.Abs(this.speed) < -1 || Mathf.Abs(this.speed) > 1;
+        return this.isMoving;
     }
     protected void MoveConsumeEnergy()
     {
@@ -124,6 +123,10 @@ public class CarMovement : TMonoBehaviour
         }
         float energyToConsume = this.energyConsumptionRate * Mathf.Abs(this.speed) * Time.fixedDeltaTime;
         this.carCtlr.CarEnergy.ConsumeEnergy(energyToConsume);
+    }
+    protected void CanMove()
+    {
+
     }
     public void SetSpeed(float newSpeed)
     {

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CarStateMachine))]
 public class CarCtlr : TMonoBehaviour
 {
     private static CarCtlr instance;
@@ -17,6 +18,8 @@ public class CarCtlr : TMonoBehaviour
         }
         instance = this;
     }
+    [SerializeField] CarStateMachine carStateMachine;
+    public CarStateMachine CarStateMachine { get => carStateMachine; }
     [SerializeField] Rigidbody carRigidbody;
     public Rigidbody CarRigidbody { get => carRigidbody; }
     [SerializeField] CarEnergy carEnergy;
@@ -28,10 +31,17 @@ public class CarCtlr : TMonoBehaviour
     protected override void LoadComponents()
     {
         base.LoadComponents();
+        this.LoadCarStateMachine();
         this.LoadRigidbody();
         this.LoadCarEnergy();
         this.LoadCarMovement();
         this.LoadCarImpact();
+    }
+    protected virtual void LoadCarStateMachine()
+    {
+        if (this.carStateMachine != null) return;
+        this.carStateMachine = GetComponent<CarStateMachine>();
+        Debug.LogWarning($"CarCtlr: LoadCarStateMachine in {gameObject.name} ", gameObject);
     }
     protected virtual void LoadRigidbody()
     {
@@ -57,10 +67,18 @@ public class CarCtlr : TMonoBehaviour
         this.carImpact = GetComponentInChildren<CarImpact>();
         Debug.LogWarning($"CarCtlr: LoadCarImpact in {gameObject.name} ", gameObject);
     }
+    protected void FixedUpdate()
+    {
+        this.carMovement.UpdateMove();
+    }
     protected void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground")) return;
-        this.carImpact.ApplyImpactForce(collision);
+        bool shouldCrash = this.carImpact.ApplyImpactForce(collision);
+        if (shouldCrash && carStateMachine != null)
+        {
+            this.carStateMachine.ChangeState(carStateMachine.CarCrashState);
+        }
     }
     protected void OnTriggerEnter(Collider other)
     {

@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class CarImpact : Cooldown
     [SerializeField] protected float impactForceThreshold = 10f;
     [Header("Checkpoint Settings")]
     [SerializeField] protected GameObject currentCheckpoint;
+    public event Action OnCompleteCheckpoint;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -22,13 +24,17 @@ public class CarImpact : Cooldown
 
     //==================Impact Force==================
 
-    public void ApplyImpactForce(Collision collision)
+    public bool ApplyImpactForce(Collision collision)
     {
         float impactForce = this.carCtlr.CarMovement.Speed / 50f; // Example calculation for impact force
-        if (impactForce < this.impactForceThreshold) return;
-        Vector3 bounce = 10f * impactForce * collision.contacts[0].normal;
-        this.carCtlr.CarRigidbody.AddForce(bounce, ForceMode.Impulse);
-        this.carCtlr.CarMovement.SetSpeed(0f); // Reset speed on impact
+        bool shouldCrash = impactForce >= this.impactForceThreshold;
+        if (shouldCrash)
+        {
+            Vector3 bounce = 10f * impactForce * collision.contacts[0].normal;
+            this.carCtlr.CarRigidbody.AddForce(bounce, ForceMode.Impulse);
+            Debug.Log("Impact force: " + impactForce);
+        }
+        return shouldCrash;
     }
 
     //==================Impact CheckPoint==================
@@ -49,7 +55,8 @@ public class CarImpact : Cooldown
     }
     protected virtual void StartCheckpointTimer(Collider checkpoint)
     {
-        this.currentCheckpoint = checkpoint.gameObject;
+        this.currentCheckpoint = checkpoint.transform.parent.gameObject;
+        // this.SetCooldownTime(currentCheckpoint.GetComponent<>.TimeToDisable);
         this.StartCooldown();
     }
     protected override void ResetCooldown()
@@ -66,8 +73,8 @@ public class CarImpact : Cooldown
     }
     protected virtual void DisableCheckpoint(GameObject checkpoint)
     {
-        checkpoint.transform.parent.gameObject.SetActive(false);
-
+        checkpoint.GetComponent<PooledObject>().Release();
+        OnCompleteCheckpoint?.Invoke();
     }
 }
 
