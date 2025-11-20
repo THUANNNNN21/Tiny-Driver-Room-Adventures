@@ -8,6 +8,7 @@ public class MissionSpawner : TMonoBehaviour
     [SerializeField] protected List<GameObject> checkPoints = new();
     public List<GameObject> CheckPoints => checkPoints;
     [SerializeField] private CarImpact carImpact;
+    [SerializeField] protected int nextCheckpointIndex = 0;
     protected override void Awake()
     {
         base.Awake();
@@ -52,29 +53,63 @@ public class MissionSpawner : TMonoBehaviour
         if (this.checkPoints != null && this.checkPoints.Count > 0) return;
         this.checkPoints = new List<GameObject>(Resources.LoadAll<GameObject>("MissionPrefab"));
     }
-    void Start()
+    public void SpawnNextCheckpoint()
     {
-        GameObject obj = PoolManager.Instance.Get(this.GetRandomCheckPoint());
+        MissionData missionData = this.missionCtrl.MissionManager.CurrentMission;
+        CheckpointData nextCheckpoint = this.GetNextCheckpoint(missionData);
+        if (nextCheckpoint == null) return;
+        GameObject checkpointPrefab = this.GetCheckpointPrefab(nextCheckpoint.checkpointType.ToString());
+        if (checkpointPrefab == null) return;
+        GameObject obj = PoolManager.Instance.Get(checkpointPrefab);
         obj.transform.SetParent(this.holderCheckPoints.transform);
+        obj.transform.position = nextCheckpoint.position;
+        this.nextCheckpointIndex++;
     }
-    private void SpawnNextCheckpoint()
+    protected CheckpointData GetNextCheckpoint(MissionData missionData)
     {
-        GameObject obj = PoolManager.Instance.Get(this.GetRandomCheckPoint());
-        obj.transform.SetParent(this.holderCheckPoints.transform);
-        obj.transform.position = this.GetRandomPosition();
+        for (int i = 0; i < missionData.listCheckpoints.Count; i++)
+        {
+            if (i == this.nextCheckpointIndex)
+            {
+                return missionData.listCheckpoints[i];
+            }
+        }
+        this.nextCheckpointIndex = 0;
+        this.missionCtrl.MissionManager.GetRandomMission();
+        MissionData newMission = this.missionCtrl.MissionManager.CurrentMission;
+
+        // Không có mission mới thì return null
+        if (newMission == null || newMission.listCheckpoints.Count == 0)
+            return null;
+
+        // lấy checkpoint đầu tiên của mission mới
+        this.missionCtrl.MissionTimer.EnterNewMission();
+        return newMission.listCheckpoints[this.nextCheckpointIndex];
     }
-    protected GameObject GetRandomCheckPoint()
+    protected GameObject GetCheckpointPrefab(string checkpointType)
     {
-        int index = Random.Range(0, this.checkPoints.Count);
-        GameObject randomCheckPoint = this.checkPoints[index];
-        Debug.Log("Random CheckPoint: " + randomCheckPoint.name);
-        return randomCheckPoint;
+        foreach (GameObject cp in this.checkPoints)
+        {
+            if (cp.transform.name == checkpointType)
+            {
+                return cp;
+            }
+        }
+        Debug.LogWarning("Checkpoint type not found: " + checkpointType);
+        return null;
     }
-    protected Vector3 GetRandomPosition()
-    {
-        float x = Random.Range(-100f, 100f);
-        float y = 0f;
-        float z = Random.Range(-100f, 100f);
-        return new Vector3(x, y, z);
-    }
+    // protected GameObject GetRandomCheckPoint()
+    // {
+    //     int index = Random.Range(0, this.checkPoints.Count);
+    //     GameObject randomCheckPoint = this.checkPoints[index];
+    //     Debug.Log("Random CheckPoint: " + randomCheckPoint.name);
+    //     return randomCheckPoint;
+    // }
+    // protected Vector3 GetRandomPosition()
+    // {
+    //     float x = Random.Range(-100f, 100f);
+    //     float y = 0f;
+    //     float z = Random.Range(-100f, 100f);
+    //     return new Vector3(x, y, z);
+    // }
 }

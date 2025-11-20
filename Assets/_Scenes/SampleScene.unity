@@ -646,7 +646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarImpact
   currentTime: 0
-  cooldownTime: 5
+  cooldownTime: 0.5
   isCooldownActive: 0
   carCtlr: {fileID: 2090452208}
   impactForceThreshold: 0
@@ -702,6 +702,7 @@ MonoBehaviour:
   - {fileID: 1253599242883062387, guid: fb00d539f66cb4c32b7666cf86418716, type: 3}
   - {fileID: 1056407793382724743, guid: ad011f322d62f48aeade615ea98daec9, type: 3}
   carImpact: {fileID: 524140371}
+  nextCheckpointIndex: 0
 --- !u!1001 &572774229
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -984,6 +985,8 @@ Transform:
   m_Children:
   - {fileID: 555349692}
   - {fileID: 1770570529}
+  - {fileID: 1416233190}
+  - {fileID: 1597430499}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &811179464
@@ -998,7 +1001,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc124918b393b40249ab9e505e74dec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MissionCtrl
-  missionSpawner: {fileID: 0}
+  missionSpawner: {fileID: 555349693}
+  missionManager: {fileID: 1416233191}
+  missionTimer: {fileID: 1597430500}
 --- !u!1 &812309116
 GameObject:
   m_ObjectHideFlags: 0
@@ -1956,6 +1961,57 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1807256897596988560, guid: f40e52a0c26735a46b681671fb2baa40, type: 3}
   m_PrefabInstance: {fileID: 1390607632}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1416233189
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1416233190}
+  - component: {fileID: 1416233191}
+  m_Layer: 0
+  m_Name: MissionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1416233190
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416233189}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 811179463}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1416233191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416233189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22d1e6402674e41a6937ce4cc93eee24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissionManager
+  missionCtrl: {fileID: 811179464}
+  listMissions:
+  - {fileID: 11400000, guid: f05e0760a3be040c0be11e0e97eb0ba0, type: 2}
+  - {fileID: 11400000, guid: 166c0df630a7e476f9c2ed7d841c420d, type: 2}
+  - {fileID: 11400000, guid: 3b1efcedc6bf940f581961ce1690fe81, type: 2}
+  - {fileID: 11400000, guid: 02e9c7fbc584241ff9320576f9f3d251, type: 2}
+  currentMission: {fileID: 11400000, guid: 3b1efcedc6bf940f581961ce1690fe81, type: 2}
 --- !u!1 &1515492038
 GameObject:
   m_ObjectHideFlags: 0
@@ -2040,6 +2096,54 @@ Transform:
   - {fileID: 1390607638}
   m_Father: {fileID: 2090452207}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1597430498
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1597430499}
+  - component: {fileID: 1597430500}
+  m_Layer: 0
+  m_Name: MissionTimer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1597430499
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597430498}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 811179463}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1597430500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597430498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2affc32640714faebe9194ad306a9b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MissionTimer
+  currentTime: 0
+  cooldownTime: 60
+  isCooldownActive: 1
+  missionCtrl: {fileID: 811179464}
 --- !u!1 &1624158036
 GameObject:
   m_ObjectHideFlags: 0

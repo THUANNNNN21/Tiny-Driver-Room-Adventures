@@ -4,7 +4,7 @@ public abstract class Cooldown : TMonoBehaviour
 {
     [Header("Cooldown Info")]
     [SerializeField] protected float currentTime = 0f;
-    [SerializeField] protected float cooldownTime = 1f;
+    [SerializeField] protected float cooldownTime;
     public float CooldownTime => cooldownTime;
     [SerializeField] protected bool isCooldownActive = false;
     protected virtual void Update()
