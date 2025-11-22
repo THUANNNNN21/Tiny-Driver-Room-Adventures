@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 
 public class MissionTimer : Cooldown
 {
     [SerializeField] protected MissionCtrl missionCtrl;
+    public event Action<int> OnLimitTimer;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -36,5 +38,11 @@ public class MissionTimer : Cooldown
     {
         this.LoadMissionTime();
         this.StartCooldown();
+    }
+    protected override void UpdateCooldown()
+    {
+        base.UpdateCooldown();
+        int timer = Mathf.RoundToInt(this.cooldownTime - this.currentTime);
+        OnLimitTimer?.Invoke(timer);
     }
 }
