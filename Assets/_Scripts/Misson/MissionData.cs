@@ -11,7 +11,7 @@ public class MissionData : ScriptableObject
     public List<CheckpointData> listCheckpoints;
 
     public int rewardCoins;
-    public int rewardStars;
+    public int rewardScores;
     public int rewardEnergy;
 
     public float timeLimit;

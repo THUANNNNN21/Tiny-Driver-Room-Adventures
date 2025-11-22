@@ -28,6 +28,8 @@ public class CarCtlr : TMonoBehaviour
     public CarMovement CarMovement { get => carMovement; }
     [SerializeField] CarImpact carImpact;
     public CarImpact CarImpact { get => carImpact; }
+    [SerializeField] MissionCtrl missionCtrl;
+    public MissionCtrl MissionCtrl { get => missionCtrl; }
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -36,6 +38,7 @@ public class CarCtlr : TMonoBehaviour
         this.LoadCarEnergy();
         this.LoadCarMovement();
         this.LoadCarImpact();
+        this.LoadMissionCtrl();
     }
     protected virtual void LoadCarStateMachine()
     {
@@ -66,6 +69,12 @@ public class CarCtlr : TMonoBehaviour
         if (this.carImpact != null) return;
         this.carImpact = GetComponentInChildren<CarImpact>();
         Debug.LogWarning($"CarCtlr: LoadCarImpact in {gameObject.name} ", gameObject);
+    }
+    protected virtual void LoadMissionCtrl()
+    {
+        if (this.missionCtrl != null) return;
+        this.missionCtrl = GameObject.Find("Missons").GetComponent<MissionCtrl>();
+        Debug.LogWarning($"CarCtlr: LoadMissionCtrl in {gameObject.name} ", gameObject);
     }
     protected void FixedUpdate()
     {

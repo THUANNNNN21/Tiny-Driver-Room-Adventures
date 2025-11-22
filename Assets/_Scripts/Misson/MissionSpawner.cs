@@ -1,22 +1,20 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissionSpawner : TMonoBehaviour
+public class MissionSpawner : TMonoBehaviour, IDisableCPObserver
 {
     [SerializeField] protected MissionCtrl missionCtrl;
     [SerializeField] protected GameObject holderCheckPoints;
     [SerializeField] protected List<GameObject> checkPoints = new();
     public List<GameObject> CheckPoints => checkPoints;
-    [SerializeField] private CarImpact carImpact;
+    [SerializeField] private DisableCPSubject disableCPSubject;
     [SerializeField] protected int nextCheckpointIndex = 0;
+    public event Action OnCompleteSpawnCheckpoint;
     protected override void Awake()
     {
         base.Awake();
-        carImpact.OnCompleteCheckpoint += SpawnNextCheckpoint;
-    }
-    private void OnDestroy()
-    {
-        carImpact.OnCompleteCheckpoint -= SpawnNextCheckpoint;
+        this.disableCPSubject.AddObserver(this);
     }
     protected override void LoadComponents()
     {
@@ -34,13 +32,13 @@ public class MissionSpawner : TMonoBehaviour
     }
     private void LoadSubjectToObserve()
     {
-        this.LoadCarImpact();
+        this.LoadDisableCPSubject();
     }
-    protected virtual void LoadCarImpact()
+    private void LoadDisableCPSubject()
     {
-        if (this.carImpact != null) return;
-        this.carImpact = FindFirstObjectByType<CarImpact>();
-        Debug.LogWarning($"MissionSpawner: LoadCarImpact in {gameObject.name} ", gameObject);
+        if (this.disableCPSubject != null) return;
+        this.disableCPSubject = FindFirstObjectByType<DisableCPSubject>();
+        Debug.LogWarning($"MissionSpawner: LoadDisableCPSubject in {gameObject.name} ", gameObject);
     }
     private void LoadHolderCheckPoints()
     {
@@ -53,6 +51,10 @@ public class MissionSpawner : TMonoBehaviour
         if (this.checkPoints != null && this.checkPoints.Count > 0) return;
         this.checkPoints = new List<GameObject>(Resources.LoadAll<GameObject>("MissionPrefab"));
     }
+    public void OnCheckpointComplete()
+    {
+        this.SpawnNextCheckpoint();
+    }
     public void SpawnNextCheckpoint()
     {
         MissionData missionData = this.missionCtrl.MissionManager.CurrentMission;
@@ -64,6 +66,7 @@ public class MissionSpawner : TMonoBehaviour
         obj.transform.SetParent(this.holderCheckPoints.transform);
         obj.transform.position = nextCheckpoint.position;
         this.nextCheckpointIndex++;
+        OnCompleteSpawnCheckpoint?.Invoke();
     }
     protected CheckpointData GetNextCheckpoint(MissionData missionData)
     {
