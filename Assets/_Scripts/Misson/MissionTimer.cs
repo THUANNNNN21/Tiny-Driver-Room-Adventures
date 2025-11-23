@@ -26,7 +26,7 @@ public class MissionTimer : Cooldown
         MissionData missionData = this.missionCtrl.MissionManager.CurrentMission;
         if (missionData != null)
         {
-            this.SetCooldownTime(missionData.timeLimit);
+            this.SetCooldownTime(missionCtrl.MissionManager.MissionLevel.GetTimeForLevel(missionData.timeLimit));
         }
     }
     protected override void ResetCooldown()

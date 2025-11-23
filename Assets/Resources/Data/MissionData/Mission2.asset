@@ -17,7 +17,7 @@ MonoBehaviour:
   listCheckpoints:
   - {fileID: 11400000, guid: 6b72b5887f75a49798528181b1a60a27, type: 2}
   - {fileID: 11400000, guid: 14df1b397a731460db4696a0d17d0e4e, type: 2}
-  rewardCoins: 0
-  rewardStars: 0
+  rewardCoins: 30
+  rewardScores: 30
   rewardEnergy: 0
-  timeLimit: 30
+  timeLimit: 200

@@ -4,6 +4,8 @@ using UnityEngine;
 public class MissionManager : TMonoBehaviour
 {
     [SerializeField] protected MissionCtrl missionCtrl;
+    [SerializeField] protected MissionLevel missionLevel;
+    public MissionLevel MissionLevel => missionLevel;
     [SerializeField] protected List<MissionData> listMissions;
     [SerializeField] protected MissionData currentMission;
     public MissionData CurrentMission => currentMission;
@@ -11,6 +13,7 @@ public class MissionManager : TMonoBehaviour
     {
         base.LoadComponents();
         this.LoadMissionCtrl();
+        this.LoadMissionLevel();
         this.LoadListMissions();
         this.GetRandomMission();
     }
@@ -19,6 +22,12 @@ public class MissionManager : TMonoBehaviour
         if (this.missionCtrl != null) return;
         this.missionCtrl = GetComponentInParent<MissionCtrl>();
         Debug.LogWarning($"MissionManager: LoadMissionCtrl in {gameObject.name} ", gameObject);
+    }
+    private void LoadMissionLevel()
+    {
+        if (this.missionLevel != null) return;
+        this.missionLevel = GetComponentInChildren<MissionLevel>();
+        Debug.LogWarning($"MissionManager: LoadMissionLevel in {gameObject.name} ", gameObject);
     }
     private void LoadListMissions()
     {
@@ -31,8 +40,4 @@ public class MissionManager : TMonoBehaviour
         int index = Random.Range(0, listMissions.Count);
         this.currentMission = listMissions[index];
     }
-    // public void SetCurrentMission(MissionData missionData)
-    // {
-    //     this.currentMission = missionData;
-    // }
 }

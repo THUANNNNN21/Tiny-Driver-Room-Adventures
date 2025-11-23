@@ -25,6 +25,6 @@ public class UIMissionTimerText : BaseText
     }
     protected void UpdateTimer(int timer)
     {
-        uiText.text = timer.ToString();
+        uiText.text = "Time: " + timer.ToString();
     }
 }

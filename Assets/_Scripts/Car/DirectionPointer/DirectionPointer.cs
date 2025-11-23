@@ -45,7 +45,6 @@ public class DirectionPointer : TMonoBehaviour
             Quaternion targetRot = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRot, Time.deltaTime * smoothRotation);
         }
-        Debug.LogWarning("Checkpoint Target null");
     }
     public void GetCheckpoint()
     {

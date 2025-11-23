@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class MissionSpawner : TMonoBehaviour, IDisableCPObserver
@@ -11,6 +12,7 @@ public class MissionSpawner : TMonoBehaviour, IDisableCPObserver
     [SerializeField] private DisableCPSubject disableCPSubject;
     [SerializeField] protected int nextCheckpointIndex = 0;
     public event Action OnCompleteSpawnCheckpoint;
+    // public event Action OnEnterNewMission;
     protected override void Awake()
     {
         base.Awake();
@@ -77,17 +79,29 @@ public class MissionSpawner : TMonoBehaviour, IDisableCPObserver
                 return missionData.listCheckpoints[i];
             }
         }
-        this.nextCheckpointIndex = 0;
-        this.missionCtrl.MissionManager.GetRandomMission();
-        MissionData newMission = this.missionCtrl.MissionManager.CurrentMission;
-
-        // Không có mission mới thì return null
-        if (newMission == null || newMission.listCheckpoints.Count == 0)
-            return null;
-
-        // lấy checkpoint đầu tiên của mission mới
+        MissionData newMission = this.GetNewMission();
         this.missionCtrl.MissionTimer.EnterNewMission();
         return newMission.listCheckpoints[this.nextCheckpointIndex];
+    }
+    protected MissionData GetNewMission()
+    {
+        MissionManager missionManager = this.missionCtrl.MissionManager;
+        this.CompleteMission(missionManager);
+        missionManager.GetRandomMission();
+        MissionData newMission = missionManager.CurrentMission;
+        missionManager.MissionLevel.SetLevel(missionManager.MissionLevel.Level + 1);
+        // Không có mission mới thì return null
+        if (newMission != null || newMission.listCheckpoints.Count != 0)
+            return newMission;
+        else return null;
+    }
+    protected void CompleteMission(MissionManager missionManager)
+    {
+        this.nextCheckpointIndex = 0;
+        int scoreToAdd = missionManager.MissionLevel.GetScoreForLevel(missionManager.CurrentMission.rewardScores);
+        ScoreManager.Instance.AddScore(scoreToAdd);
+        int coinToAdd = missionManager.MissionLevel.GetCoinForLevel(missionManager.CurrentMission.rewardCoins);
+        CoinManager.Instance.AddCoins(coinToAdd);
     }
     protected GameObject GetCheckpointPrefab(string checkpointType)
     {
