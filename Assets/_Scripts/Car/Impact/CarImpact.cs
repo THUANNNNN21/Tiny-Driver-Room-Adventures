@@ -27,6 +27,7 @@ public class CarImpact : Cooldown
     public bool ApplyImpactForce(Collision collision)
     {
         float impactForce = this.carCtlr.CarMovement.Speed / 50f; // Example calculation for impact force
+        this.carCtlr.CarIntegrity.DecreaseIntegrity(impactForce * 5f); // Decrease integrity based on impact force
         bool shouldCrash = impactForce >= this.impactForceThreshold;
         if (shouldCrash)
         {

@@ -24,7 +24,8 @@ public class CarDrivingState : IState
         {
             carStateMachine.ChangeState(carStateMachine.CarIdleState);
         }
-        if (carCtlr.CarEnergy != null && carCtlr.CarEnergy.IsExhausted)
+        if (carCtlr.CarEnergy != null && carCtlr.CarEnergy.IsExhausted
+            || carCtlr.CarIntegrity != null && carCtlr.CarIntegrity.IsBroken)
         {
             carStateMachine.ChangeState(carStateMachine.CarIdleState);
         }

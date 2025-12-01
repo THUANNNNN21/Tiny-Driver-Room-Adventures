@@ -264,9 +264,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DirectionPointer
   carCtlr: {fileID: 2090452208}
-  missionSpawner: {fileID: 555349693}
   smoothRotation: 8
   checkpointTarget: {fileID: 0}
+  completeSpawnCPSubject: {fileID: 555349694}
+  checkpointsHolder: {fileID: 1770570528}
 --- !u!1 &291491845
 GameObject:
   m_ObjectHideFlags: 0
@@ -1006,7 +1007,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarImpact
   currentTime: 0
-  cooldownTime: 0.5
+  cooldownTime: 0.1
   isCooldownActive: 0
   carCtlr: {fileID: 2090452208}
   impactForceThreshold: 5
@@ -1034,6 +1035,7 @@ GameObject:
   m_Component:
   - component: {fileID: 555349692}
   - component: {fileID: 555349693}
+  - component: {fileID: 555349694}
   m_Layer: 0
   m_Name: MissonSpawner
   m_TagString: Untagged
@@ -1076,6 +1078,19 @@ MonoBehaviour:
   - {fileID: 1056407793382724743, guid: ad011f322d62f48aeade615ea98daec9, type: 3}
   disableCPSubject: {fileID: 524140372}
   nextCheckpointIndex: 0
+--- !u!114 &555349694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 555349691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42c363fc3e1294a19b6ee1a2e1998cf6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CompleteSpawnCPSubject
+  subject: {fileID: 555349693}
 --- !u!1001 &572774229
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3580,6 +3595,7 @@ Transform:
   - {fileID: 1527970779}
   - {fileID: 1515492039}
   - {fileID: 2073152643}
+  - {fileID: 2140327643}
   - {fileID: 524140370}
   - {fileID: 277958030}
   m_Father: {fileID: 0}
@@ -3602,6 +3618,7 @@ MonoBehaviour:
   carMovement: {fileID: 1515492040}
   carImpact: {fileID: 524140371}
   missionCtrl: {fileID: 811179464}
+  carIntegrity: {fileID: 0}
 --- !u!114 &2090452209
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3616,6 +3633,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CarStateMachine
   carCtlr: {fileID: 2090452208}
   currentStateType: 1
+--- !u!1 &2140327642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2140327643}
+  - component: {fileID: 2140327644}
+  m_Layer: 6
+  m_Name: Integrity
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2140327643
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140327642}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2090452207}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2140327644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2140327642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24185a20ba6540dd87fc488c70b5ffc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarIntegrity
+  maxIntegrity: 10
+  currentIntegrity: 100
+  isBroken: 0
 --- !u!33 &44730714058643428
 MeshFilter:
   m_ObjectHideFlags: 0

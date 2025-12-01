@@ -4,8 +4,8 @@ public class CarCrashState : IState
 {
     protected CarStateMachine carStateMachine;
     protected CarCtlr carCtlr;
-    float carshTime = 5f;
-    float currentTime = 0;
+    [SerializeField] protected float carshTime = 5f;
+    [SerializeField] protected float currentTime = 0;
     public CarCrashState(CarStateMachine carStateMachine)
     {
         this.carStateMachine = carStateMachine;

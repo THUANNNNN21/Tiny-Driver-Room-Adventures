@@ -2,43 +2,26 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(CarImpact))]
-public class DisableCPSubject : TMonoBehaviour
+public class DisableCPSubject : Subject
 {
     [Header("Subject")]
     [SerializeField] private CarImpact subject;
-
-    [Header("Observers")]
-    [SerializeField] private List<IDisableCPObserver> observers = new();
-    protected override void Awake()
-    {
-        base.Awake();
-        subject.OnCompleteCheckpoint += OnCheckpointComplete;
-    }
-    private void OnDestroy()
-    {
-        subject.OnCompleteCheckpoint -= OnCheckpointComplete;
-    }
-    protected override void LoadComponents()
-    {
-        base.LoadComponents();
-        this.LoadSubject();
-    }
-    protected void LoadSubject()
+    protected override void LoadSubject()
     {
         if (this.subject != null) return;
         this.subject = GetComponent<CarImpact>();
         Debug.LogWarning($"CarMovement: LoadSubject in {gameObject.name} ", gameObject);
     }
-    public void AddObserver(IDisableCPObserver observer)
+    protected override void Subcribe()
     {
-        this.observers.Add(observer);
-        Debug.Log("Add observer: " + observer);
+        subject.OnCompleteCheckpoint += OnCheckpointComplete;
+    }
+    protected override void Unsubcribe()
+    {
+        subject.OnCompleteCheckpoint -= OnCheckpointComplete;
     }
     protected void OnCheckpointComplete()
     {
-        foreach (IDisableCPObserver observer in this.observers)
-        {
-            observer.OnCheckpointComplete();
-        }
+        this.NoticeObserver();
     }
 }

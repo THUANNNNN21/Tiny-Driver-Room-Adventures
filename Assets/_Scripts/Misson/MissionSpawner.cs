@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class MissionSpawner : TMonoBehaviour, IDisableCPObserver
+public class MissionSpawner : TMonoBehaviour, IObserver
 {
     [SerializeField] protected MissionCtrl missionCtrl;
     [SerializeField] protected GameObject holderCheckPoints;
@@ -13,11 +13,6 @@ public class MissionSpawner : TMonoBehaviour, IDisableCPObserver
     [SerializeField] protected int nextCheckpointIndex = 0;
     public event Action OnCompleteSpawnCheckpoint;
     // public event Action OnEnterNewMission;
-    protected override void Awake()
-    {
-        base.Awake();
-        this.disableCPSubject.AddObserver(this);
-    }
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -25,6 +20,7 @@ public class MissionSpawner : TMonoBehaviour, IDisableCPObserver
         this.LoadSubjectToObserve();
         this.LoadHolderCheckPoints();
         this.LoadCheckPoints();
+        this.disableCPSubject.AddObserver(this);
     }
     private void LoadMissionCtrl()
     {
@@ -53,7 +49,7 @@ public class MissionSpawner : TMonoBehaviour, IDisableCPObserver
         if (this.checkPoints != null && this.checkPoints.Count > 0) return;
         this.checkPoints = new List<GameObject>(Resources.LoadAll<GameObject>("MissionPrefab"));
     }
-    public void OnCheckpointComplete()
+    public void OnSujectNotice()
     {
         this.SpawnNextCheckpoint();
     }
@@ -69,6 +65,7 @@ public class MissionSpawner : TMonoBehaviour, IDisableCPObserver
         obj.transform.position = nextCheckpoint.position;
         this.nextCheckpointIndex++;
         OnCompleteSpawnCheckpoint?.Invoke();
+        Debug.Log("MissionSpawner: SpawnNextCheckpoint " + nextCheckpoint.checkpointType.ToString());
     }
     protected CheckpointData GetNextCheckpoint(MissionData missionData)
     {
