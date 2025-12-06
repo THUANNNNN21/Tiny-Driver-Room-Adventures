@@ -25,11 +25,9 @@ public abstract class Subject : TMonoBehaviour
     public void AddObserver(IObserver observer)
     {
         this.observers.Add(observer);
-        Debug.Log("Add observer: " + observer);
     }
     protected void NoticeObserver()
     {
-        Debug.Log("Subject: NoticeObserver to " + observers.Count + " observers.");
         foreach (IObserver observer in this.observers)
         {
             observer.OnSujectNotice();

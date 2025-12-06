@@ -23,4 +23,9 @@ public class CarEnergy : TMonoBehaviour
         this.currentEnergy = Mathf.Max(this.currentEnergy, 0f);
         isExhausted = this.currentEnergy <= 0f;
     }
+    public void RechargeEnergy(float amount)
+    {
+        this.currentEnergy += amount;
+        this.currentEnergy = Mathf.Min(this.currentEnergy, this.maxEnergy);
+    }
 }

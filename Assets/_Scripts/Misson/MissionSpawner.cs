@@ -65,7 +65,6 @@ public class MissionSpawner : TMonoBehaviour, IObserver
         obj.transform.position = nextCheckpoint.position;
         this.nextCheckpointIndex++;
         OnCompleteSpawnCheckpoint?.Invoke();
-        Debug.Log("MissionSpawner: SpawnNextCheckpoint " + nextCheckpoint.checkpointType.ToString());
     }
     protected CheckpointData GetNextCheckpoint(MissionData missionData)
     {

@@ -1,5 +1,5 @@
 using System;
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 
 public class CarImpact : Cooldown
@@ -10,6 +10,14 @@ public class CarImpact : Cooldown
     [Header("Checkpoint Settings")]
     [SerializeField] protected GameObject currentCheckpoint;
     public event Action OnCompleteCheckpoint;
+    [Header("Recharge Settings")]
+    [SerializeField] protected float rechargeStayDuration = 3f; // thời gian cần đứng trong vùng để recharge
+    [SerializeField] protected bool autoFullRecharge = true;    // nếu true thì recharge full khi hoàn tất
+
+    protected Coroutine rechargeCoroutine;
+    protected bool isInRechargePlace = false;
+    public event Action OnCompleteRecharge; // optional event khi recharge xong
+
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -21,7 +29,17 @@ public class CarImpact : Cooldown
         this.carCtlr = GetComponentInParent<CarCtlr>();
         Debug.LogWarning($"CarImpact: LoadCarController in {gameObject.name} ", gameObject);
     }
-
+    //==================Enter and Exit==================
+    public void OnEnterTrigger(Collider other)
+    {
+        this.EnterCheckPoint(other);
+        this.EnterRechargePlace(other);
+    }
+    public void OnExitTrigger(Collider other)
+    {
+        this.ExitCheckPoint(other);
+        this.ExitRechargePlace(other);
+    }
     //==================Impact Force==================
 
     public bool ApplyImpactForce(Collision collision)
@@ -40,14 +58,14 @@ public class CarImpact : Cooldown
 
     //==================Impact CheckPoint==================
 
-    public void EnterCheckPoint(Collider other)
+    private void EnterCheckPoint(Collider other)
     {
         if (other.CompareTag("CheckPoint"))
         {
             this.StartCheckpointTimer(other);
         }
     }
-    public void ExitCheckPoint(Collider other)
+    private void ExitCheckPoint(Collider other)
     {
         if (other.CompareTag("CheckPoint"))
         {
@@ -57,7 +75,6 @@ public class CarImpact : Cooldown
     protected virtual void StartCheckpointTimer(Collider checkpoint)
     {
         this.currentCheckpoint = checkpoint.transform.parent.gameObject;
-        // this.SetCooldownTime(currentCheckpoint.GetComponent<>.TimeToDisable);
         this.StartCooldown();
     }
     protected override void ResetCooldown()
@@ -76,6 +93,61 @@ public class CarImpact : Cooldown
     {
         checkpoint.GetComponent<PooledObject>().Release();
         OnCompleteCheckpoint?.Invoke();
+    }
+    //==================Impact Recharge Place==================
+    private void EnterRechargePlace(Collider other)
+    {
+        if (!other.CompareTag("RechargePlace")) return;
+
+        if (rechargeCoroutine != null) return;
+        isInRechargePlace = true;
+        rechargeCoroutine = StartCoroutine(RechargeRoutine());
+        Debug.Log($"⏱️ Entered RechargePlace. Need to stay {rechargeStayDuration}s to recharge.");
+    }
+    private void ExitRechargePlace(Collider other)
+    {
+        if (!other.CompareTag("RechargePlace")) return;
+
+        if (rechargeCoroutine != null)
+        {
+            StopCoroutine(rechargeCoroutine);
+            rechargeCoroutine = null;
+        }
+        isInRechargePlace = false;
+        Debug.Log("⚠️ Left RechargePlace before completing recharge.");
+    }
+    protected IEnumerator RechargeRoutine()
+    {
+        float elapsed = 0f;
+
+        while (elapsed < rechargeStayDuration)
+        {
+            // nếu bị rời khỏi vùng, dừng coroutine
+            if (!isInRechargePlace)
+            {
+                yield break;
+            }
+
+            elapsed += Time.deltaTime;
+            // (tùy chọn) bạn có thể gửi progress event ở đây
+            yield return null;
+        }
+        if (carCtlr != null && carCtlr.CarEnergy != null)
+        {
+            if (autoFullRecharge)
+            {
+                carCtlr.CarEnergy.RechargeEnergy(carCtlr.CarEnergy.MaxEnergy);
+            }
+            else
+            {
+                carCtlr.CarEnergy.RechargeEnergy(carCtlr.CarEnergy.MaxEnergy);
+            }
+
+            Debug.Log("✅ Recharge completed: energy full.");
+            OnCompleteRecharge?.Invoke();
+        }
+        rechargeCoroutine = null;
+        isInRechargePlace = false;
     }
 }
 

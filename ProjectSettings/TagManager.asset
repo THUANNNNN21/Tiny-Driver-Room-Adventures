@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - CheckPoint
+  - RechargePlace
   layers:
   - Default
   - TransparentFX

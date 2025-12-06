@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CarIntegrity : TMonoBehaviour
 {
-    [SerializeField] protected float maxIntegrity = 100f;
+    [SerializeField] protected float maxIntegrity = 1000f;
     public float MaxIntegrity => maxIntegrity;
     [SerializeField] protected float currentIntegrity;
     public float CurrentIntegrity => currentIntegrity;

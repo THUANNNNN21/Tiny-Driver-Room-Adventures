@@ -101,11 +101,11 @@ public class CarCtlr : TMonoBehaviour
     protected void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ground")) return;
-        this.carImpact.EnterCheckPoint(other);
+        this.carImpact.OnEnterTrigger(other);
     }
     protected void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Ground")) return;
-        this.carImpact.ExitCheckPoint(other);
+        this.carImpact.OnExitTrigger(other);
     }
 }

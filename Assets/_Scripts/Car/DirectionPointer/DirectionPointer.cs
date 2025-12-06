@@ -61,7 +61,6 @@ public class DirectionPointer : TMonoBehaviour, IObserver
     public void OnSujectNotice()
     {
         this.GetCheckpoint();
-        Debug.Log("DirectionPointer: OnSujectNotice");
     }
     public void GetCheckpoint()
     {
